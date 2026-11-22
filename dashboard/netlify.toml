@@ -1,0 +1,12 @@
+[build]
+  publish = "site"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Content-Security-Policy = "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src https://hozjqfzydxdnrttexlay.supabase.co https://hkjyzuimbamkmcvhqyto.supabase.co; frame-ancestors 'none'; base-uri 'none'; form-action 'none'"
+    X-Robots-Tag = "noindex, nofollow"
+    Referrer-Policy = "no-referrer"
+    X-Content-Type-Options = "nosniff"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
+    Cache-Control = "no-cache"

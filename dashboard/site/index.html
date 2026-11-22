@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Sales &amp; Ads · Swiss Citizen + Swiss Gymi</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23d52b1e'/%3E%3Cpath d='M13 7h6v6h6v6h-6v6h-6v-6H7v-6h6z' fill='%23fff'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="viz-root">
+  <section id="login" class="login" hidden>
+    <form id="login-form" class="card login-card">
+      <h1>Sales &amp; Ads dashboard</h1>
+      <p class="muted">Enter your dashboard token. It is kept in this browser only.</p>
+      <label for="token">Dashboard token</label>
+      <input id="token" type="password" autocomplete="current-password" spellcheck="false" required minlength="16">
+      <button type="submit">Open dashboard</button>
+      <p id="login-error" class="error" role="alert"></p>
+    </form>
+  </section>
+
+  <div id="app" hidden>
+    <header class="top">
+      <div>
+        <h1>Sales &amp; Ads</h1>
+        <p class="muted" id="updated">Loading…</p>
+      </div>
+      <div class="controls">
+        <div class="seg" role="group" aria-label="Date range">
+          <button data-days="7">7 days</button>
+          <button data-days="30" class="on">30 days</button>
+          <button data-days="90">90 days</button>
+        </div>
+        <button id="refresh" class="ghost" title="Reload data">Refresh</button>
+        <button id="logout" class="ghost" title="Forget token on this device">Lock</button>
+      </div>
+    </header>
+
+    <section id="alerts" class="alerts" aria-live="polite"></section>
+
+    <!-- SWISS CITIZEN -->
+    <section class="product">
+      <div class="product-head">
+        <h2>Swiss Citizen <a class="site" href="https://swiss-citizen.com" target="_blank" rel="noopener">swiss-citizen.com ↗</a></h2>
+        <span class="muted" id="sc-lifetime"></span>
+      </div>
+      <div class="tiles" id="sc-tiles"></div>
+
+      <div class="grid2">
+        <figure class="card chart">
+          <figcaption><h3>Daily revenue</h3><span class="muted">CHF, completed Stripe checkouts</span></figcaption>
+          <div class="plot" id="sc-revenue"></div>
+        </figure>
+        <figure class="card chart">
+          <figcaption><h3>Daily visits by source</h3>
+            <span class="legend"><i class="sw s1"></i>Google Ads <i class="sw s3"></i>Other</span></figcaption>
+          <div class="plot" id="sc-visits"></div>
+        </figure>
+      </div>
+
+      <div class="grid2">
+        <div class="card">
+          <h3>Funnel</h3>
+          <div id="sc-funnel" class="funnel"></div>
+          <p class="muted small" id="sc-checkout-note"></p>
+        </div>
+        <div class="card">
+          <h3>Google Ads</h3>
+          <div id="sc-ads"></div>
+        </div>
+      </div>
+
+      <div class="grid2">
+        <div class="card">
+          <h3>By language</h3>
+          <div class="tablewrap"><table id="sc-lang"></table></div>
+        </div>
+        <div class="card">
+          <h3>Traffic sources</h3>
+          <div id="sc-sources" class="hbars"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SWISS GYMI -->
+    <section class="product">
+      <div class="product-head">
+        <h2>Swiss Gymi <a class="site" href="https://swiss-gymi.com" target="_blank" rel="noopener">swiss-gymi.com ↗</a></h2>
+        <span class="muted" id="gy-zap"></span>
+      </div>
+      <div class="tiles" id="gy-tiles"></div>
+      <div class="grid2">
+        <div class="card">
+          <h3>Trial funnel</h3>
+          <div id="gy-funnel" class="funnel"></div>
+          <p class="muted small">"Gymi" = the ZAP exam trial; "Mathe" = the primary-school maths trial.</p>
+        </div>
+        <div class="card">
+          <h3>Google Ads</h3>
+          <div id="gy-ads"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ADS DATA -->
+    <section class="product">
+      <div class="card">
+        <h3>Google Ads data</h3>
+        <p class="muted" id="ads-status"></p>
+        <details>
+          <summary>Import a Google Ads CSV export</summary>
+          <p class="small">In Google Ads: <b>Campaigns</b> → set the date range → <b>Segment</b> → <b>Time</b> → <b>Day</b> → <b>Download</b> → CSV. Then drop the file here.
+            Campaigns are matched to a product by name ("Gymi", "ZAP", "Mathe" → Swiss Gymi; "Citizen", "Einbürgerung" → Swiss Citizen).</p>
+          <input type="file" id="csv" accept=".csv,text/csv">
+          <p id="csv-result" class="small" role="status"></p>
+        </details>
+      </div>
+    </section>
+
+    <footer class="muted small">Aggregates only, no customer data. Swiss Citizen sales = completed Stripe checkouts recorded by the webhook; ads attribution = buyer clicked a Google ad on that device within 30 days. Stripe fee for break-even ≈ 2.9% + CHF 0.30.</footer>
+  </div>
+  <div id="tip" class="tip" role="tooltip" hidden></div>
+</div>
+<script src="app.js" type="module"></script>
+</body>
+</html>
