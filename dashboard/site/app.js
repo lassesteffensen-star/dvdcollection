@@ -34,9 +34,14 @@ const token = () => localStorage.getItem(TOKEN_KEY);
 function showLogin(msg = "") {
   $("#app").hidden = true; $("#login").hidden = false; $("#login-error").textContent = msg; $("#token").focus();
 }
-$("#login-form").addEventListener("submit", (e) => {
+// The password is turned into the API token in the browser: token = SHA-256("swiss-sales-dashboard:" + password).
+async function passwordToToken(pw) {
+  const d = await crypto.subtle.digest("SHA-256", new TextEncoder().encode("swiss-sales-dashboard:" + pw));
+  return Array.from(new Uint8Array(d)).map((x) => x.toString(16).padStart(2, "0")).join("");
+}
+$("#login-form").addEventListener("submit", async (e) => {
   e.preventDefault();
-  localStorage.setItem(TOKEN_KEY, $("#token").value.trim());
+  localStorage.setItem(TOKEN_KEY, await passwordToToken($("#token").value.trim()));
   $("#token").value = "";
   boot();
 });
