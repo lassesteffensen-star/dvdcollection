@@ -67,7 +67,15 @@ async function load() {
     $("#updated").textContent = "Could not load data: " + e.message;
   }
 }
+// One-click login: https://…/#t=<token>. The fragment never reaches a server; it is saved and removed from the URL.
+function tokenFromLink() {
+  const m = /(?:^#|&)t=([A-Za-z0-9_-]{16,128})/.exec(location.hash);
+  if (!m) return;
+  localStorage.setItem(TOKEN_KEY, m[1]);
+  history.replaceState(null, "", location.pathname + location.search);
+}
 function boot() {
+  tokenFromLink();
   if (!token()) return showLogin();
   $("#login").hidden = true; $("#app").hidden = false;
   load();

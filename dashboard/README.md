@@ -10,6 +10,7 @@ Google Ads Script (daily) ──ingest token──▶  sales-dashboard/ingest  �
 ```
 
 - The functions return **aggregates only**: no emails, no names. SQL lives in `dashboard_citizen()` / `dashboard_gymi()`. These are `security definer` functions that only `service_role` can execute.
+- One-click login: open `https://swiss-sales-dashboard.netlify.app/#t=<dashboard token>` once (bookmark it). The token after `#` is never sent to a server; the page stores it in the browser and removes it from the address bar.
 - Tokens are never stored. `public.dashboard_access` holds their SHA-256 hashes. The **dashboard token** reads everything and can import a CSV. The **ingest token** can only write ad stats.
 - CORS only allows `https://swiss-sales-dashboard.netlify.app` (plus localhost). To change that, set `DASHBOARD_ORIGINS` on the functions.
 
