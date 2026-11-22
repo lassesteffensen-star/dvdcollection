@@ -1,9 +1,8 @@
 # Swiss Citizen & Swiss Gymi: sales and marketing analysis
 
-Data as of 22 Nov 2026, 11:00 CET. Sources: Stripe (live account, both products), Supabase
-`swiss-citizen` and `swiss-gymi` databases, Resend, Gmail, Netlify.
-**Missing: Google Ads spend, clicks and cost per click.** No Google Ads connector is connected,
-so return on ad spend is computed against a break-even cost per click instead of real spend.
+Data as of 22 Nov 2026, 13:30 CET. Sources: Stripe (live account, both products), Supabase
+`swiss-citizen` and `swiss-gymi` databases, Resend, Gmail, Netlify, and the **Google Ads campaign report
+(26 Oct – 22 Nov 2026, daily per campaign)** received by email on 22 Nov and loaded into the dashboard.
 
 ---
 
@@ -53,7 +52,29 @@ Stripe sessions since 1 Oct (Swiss Citizen):
 
 **Why people may hesitate:** CHF 29 is a stranger's charge on a Stripe page. The site never asks for an email before checkout, so there is nothing to follow up with, and Stripe can't send recovery emails because `consent_collection` is off on the payment links.
 
-### 1.4 Ads compared with everything else
+### 1.4 Google Ads: real cost (campaign report)
+
+**8–22 Nov, after sales started being tagged by source:**
+
+| Campaign | Clicks | Cost | Cost per click | Click rate | Real ad sales | Cost / sale | ROAS* |
+|---|---|---|---|---|---|---|---|
+| **Swiss Citizen DE** | 656 | CHF 133.70 | **0.20** | 18.9% | **7** | **CHF 19.10** | **1.52×** |
+| Swiss Citizen FR | 310 | CHF 56.08 | 0.18 | 17.6% | 0 | – | 0 |
+| Swiss Citizen EN | 55 | CHF 12.23 | 0.22 | 9.7% | 0 | – | 0 |
+| **Swiss Citizen total** | 1,021 | CHF 202.01 | 0.20 | | 7 | CHF 28.86 | 1.00× |
+| Swiss Gymi (from 18 Nov) | 18 | CHF 24.82 | **1.38** | 8.5% | 0 | – | 0 |
+
+\*ROAS here = revenue from ad-tagged sales (CHF 29 each) divided by ad spend. Click rate = clicks ÷ impressions.
+
+- **German ads make money; French and English ads don't.** German costs CHF 19 per CHF 29 sale. Across all three languages it averages CHF 28.86 per sale, the whole price, so the account as a whole only broke even.
+- **Break-even cost per click is about CHF 0.19 for the account and CHF 0.30 for German.** Earlier I estimated CHF 0.37 from site visits. Google reports 1,021 paid clicks, but the site recorded only 523 ad visits, so measuring per click is the correct basis.
+- **About half of paid clicks never show up as a visit** (1,021 clicks against 523 visits). Either the site logs a visitor only once per day, or people leave before the page loads (slow on mobile?). If it's the second, half the ad money is wasted. Check this.
+- **Google over-reports conversions.** It counts 1 French conversion that never happened (no French sale in Stripe), and 13 German conversions against 10 real German sales. Until Google is fed real Stripe purchases, automatic bidding optimises against wrong numbers.
+- **Cost per click halved from early November:** CHF 0.35 in the week of 2 Nov, CHF 0.18–0.19 from 9 Nov.
+- **The 20–22 Nov traffic drop is explained by the ads, not billing:** the FR campaign was **paused at 09:50 on 21 Nov** (it had been bringing about 26 clicks a day), and German clicks fell from about 40 a day (17–18 Nov) to 24–25 (20–21 Nov), with daily cost going from about CHF 8 to about CHF 4. The ads are still running, so look at the German budget or bids. Fewer clicks means fewer sales: at about 1 sale per 94 German clicks, 15 fewer clicks a day costs about 1 sale every 6 days.
+- **Swiss Gymi:** CHF 24.82 bought 18 clicks (CHF 1.38 each), which led to 7 trial opens (CHF 3.55 per open), 0 starts and 0 sales.
+
+### 1.5 Ads compared with everything else
 
 Ad tagging (`client_reference_id … _gads`) started on 8–9 Nov:
 
@@ -66,7 +87,7 @@ Ad tagging (`client_reference_id … _gads`) started on 8–9 Nov:
 - Revenue per ad visit: CHF 0.39 gross, **CHF 0.37 after Stripe fees, which is your break-even cost per click**. If your average cost per click is above CHF 0.37, ads lose money on the first purchase.
 - From 1–8 Nov (before tagging), the source split is unknown for 6 sales.
 
-### 1.5 Language and region
+### 1.6 Language and region
 
 | Language | Visits | First answer | Paywall → checkout click |
 |---|---|---|---|
@@ -78,7 +99,7 @@ Ad tagging (`client_reference_id … _gads`) started on 8–9 Nov:
 - English users are few but buy readily, which fits expat professionals. Consider a small English-only ad group.
 - Canton data for visits is unreliable, because visits default to ZH before the user picks a canton. Use paywall → checkout click instead: BE 14%, ZH 12%, TG 29% (small sample), VD 2%, AG 3%.
 
-### 1.6 Other marketing channels
+### 1.7 Other marketing channels
 
 | Channel | Visits in Nov | Verdict |
 |---|---|---|
@@ -129,26 +150,29 @@ The ZAP (the Zurich Gymi entrance exam) is on **9 March 2027, 15 weeks from now*
 ## 3. Recommendations, in priority order
 
 ### This week
-1. **Find out why traffic dropped on 20–22 Nov** (budget, billing, a disapproved ad, or limited by budget). That is about 1.5 sales a day lost while it lasts.
-2. **Fix the French flow.** Walk through it on a phone: paywall, price, button, the French payment link, and the return page.
-3. **Collect emails before checkout.** For example: "Get your weak topics and a reminder before your test date" on the result screen. Then send 3 emails (your result, your weakest topic, a reminder with the offer). Separately, turn on Stripe consent collection and recovery emails for expired checkouts.
-4. **Add the Google Ads data** with a connector (Adspirer, Windsor.ai or Supermetrics) or by pasting a CSV into the dashboard. Compare your cost per click with **CHF 0.37**.
+1. **Put the French ad money into German.** Keep FR paused (CHF 56, 0 sales) until the French paywall is fixed. Restore German to about CHF 8–10 a day (it fell to about CHF 4) and keep its cost per click below about CHF 0.28.
+2. **Pause or cap the Swiss Gymi ads** (CHF 1.38 a click, 0 trial starts) until the trial start is fixed. Then restart at around CHF 3 a day.
+3. **Keep English small** (55 clicks, 0 sales), or stop it. English visitors who come without ads do buy, so put English into the German campaign's keywords instead.
+4. **Fix the French flow.** Walk through it on a phone: paywall, price, button, the French payment link, and the return page.
+5. **Collect emails before checkout.** For example: "Get your weak topics and a reminder before your test date" on the result screen. Then send 3 emails (your result, your weakest topic, a reminder with the offer). Separately, turn on Stripe consent collection and recovery emails for expired checkouts.
+6. **Send real purchases to Google Ads** as conversions (an offline import from Stripe, or a purchase event on the return page). Google currently over-counts.
+7. **Find out why only about half of paid clicks become a visit.** Test the landing page on mobile over 4G; if it's slow, fix that before raising any budget.
 
 ### Next 2–4 weeks
-5. **Make checkout feel safer on mobile**, where only 22% complete. Show "one-time CHF 29 · TWINT · 30-day refund" right above the button on the site, before the Stripe redirect. Show a sample premium question so people know what they're buying.
-6. **Publish the 28 Feb 2027 vote content** (citizenship after 5 years instead of 10): a landing page, a LinkedIn post and an ad group. Searches will spike in January and February.
-7. **Swiss Gymi: rebuild the trial start.** One tap goes straight into a real ZAP-style task with no setup. Measure the open → start rate. Target 30% or more before raising ad spend.
-8. **Swiss Gymi: cross-promote.** Show a "Preparing a child for the Gymi?" card to Swiss Citizen buyers after purchase.
+8. **Make checkout feel safer on mobile**, where only 22% complete. Show "one-time CHF 29 · TWINT · 30-day refund" right above the button on the site, before the Stripe redirect. Show a sample premium question so people know what they're buying.
+9. **Publish the 28 Feb 2027 vote content** (citizenship after 5 years instead of 10): a landing page, a LinkedIn post and an ad group. Searches will spike in January and February.
+10. **Swiss Gymi: rebuild the trial start.** One tap goes straight into a real ZAP-style task with no setup. Measure the open → start rate. Target 30% or more before raising ad spend.
+11. **Swiss Gymi: cross-promote.** Show a "Preparing a child for the Gymi?" card to Swiss Citizen buyers after purchase.
 
 ### Ongoing
-9. Turn on Resend open and click tracking so email can be judged.
-10. Keep LinkedIn for credibility and don't expect sales from it. Drop the video card if fewer than about 20% keep watching.
-11. Answer the 3 open Gymi reports and fix the logged errors.
+12. Turn on Resend open and click tracking so email can be judged.
+13. Keep LinkedIn for credibility and don't expect sales from it. Drop the video card if fewer than about 20% keep watching.
+14. Answer the 3 open Gymi reports and fix the logged errors.
 
 ---
 
 ## 4. Data and tracking gaps
-- No Google Ads cost data, so return on ad spend can't be calculated.
+- Google Ads data comes from the emailed campaign report (one row per day and campaign). It doesn't include search terms or ad groups.
 - `checkout_click` records 39 clicks against 61 real Stripe sessions, and `checkout_return` records 5 against 15 sales. Some clicks and returns aren't logged.
 - 6 November sales predate ad tagging.
 - Canton is set to ZH by default on visits.

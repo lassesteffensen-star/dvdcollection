@@ -149,7 +149,9 @@ function render() {
   // Ad tagging of sales began 8 Nov 2026; before that ad-attributed sales read as 0. Use tagged days only, whole loaded range.
   const tagged = m.C.daily.filter((d) => d.day >= TAG_START);
   const tv = sum(tagged, (d) => d.visits_ads), ts = sum(tagged, (d) => d.sales_ads);
-  const breakEvenCpc = tv >= 50 ? (ts * netPerSale) / tv : null;
+  // Per paid click when Google Ads data exists (the site logs only ~half of paid clicks as visits); else per ad visit.
+  const tc = sum(m.adsDaily.filter((x) => x.product === "citizen" && x.day >= TAG_START), (x) => x.clicks);
+  const breakEvenCpc = tc >= 50 ? (ts * netPerSale) / tc : tv >= 50 ? (ts * netPerSale) / tv : null;
   const cpc = ratio(m.ads.sc.cost, m.ads.sc.clicks);
   // ROAS only over days where sales carry the ads tag (TAG_START onward), inside the selected period.
   const spendTagged = sum(m.adsDaily.filter((x) => x.product === "citizen" && x.day >= TAG_START && x.day >= m.curFrom && x.day <= m.to), (x) => x.cost_chf);
